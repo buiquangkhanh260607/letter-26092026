@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gửi ngoan xinh iu thương nhớ</title>
+  <style>
+    :root {
+      --bg-1: #efe1cf;
+      --bg-2: #d8bfa4;
+      --paper: #f8f1e4;
+      --paper-edge: #e7dac5;
+      --ink: #4a3529;
+      --accent: #8d5b4c;
+      --accent-dark: #6f473b;
+      --wax: #a8484d;
+      --shadow: rgba(60, 37, 24, 0.18);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; min-height: 100%; font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background: radial-gradient(circle at top, rgba(255,255,255,0.35), transparent 35%), linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    }
+    body { min-height: 100vh; padding: 24px; }
+    .page { max-width: 980px; margin: 0 auto; min-height: calc(100vh - 48px); display: flex; align-items: center; justify-content: center; position: relative; }
+    .scene { width: 100%; position: relative; }
+    .envelope-wrap, .letter-wrap { width: 100%; display: flex; justify-content: center; align-items: center; transition: opacity .7s ease, transform .7s ease; }
+    .envelope-wrap { min-height: 78vh; }
+    .letter-wrap { min-height: 78vh; opacity: 0; pointer-events: none; transform: translateY(32px); position: absolute; inset: 0; padding: 18px 0; }
+    body.open .envelope-wrap { opacity: 0; pointer-events: none; transform: translateY(-24px); }
+    body.open .letter-wrap { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .envelope { width: min(92vw, 720px); aspect-ratio: 1.35 / 1; position: relative; filter: drop-shadow(0 18px 30px var(--shadow)); }
+    .envelope-back { position: absolute; inset: 0; background: linear-gradient(180deg, #f3e5d5, #e8d3bb); border-radius: 10px; overflow: hidden; border: 1px solid rgba(111,71,59,.15); }
+    .envelope-paper-line { position: absolute; inset: 16px; border: 1px solid rgba(141,91,76,.18); border-radius: 6px; }
+    .flap { position: absolute; left: 0; right: 0; top: 0; height: 58%; clip-path: polygon(0 0, 100% 0, 50% 100%); background: linear-gradient(180deg, #ecdac7, #dec3a9); transform-origin: top center; transition: transform .9s ease; z-index: 4; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    body.open .flap { transform: rotateX(180deg); }
+    .left-fold, .right-fold, .bottom-fold { position: absolute; z-index: 3; }
+    .left-fold { left: 0; bottom: 0; width: 52%; height: 70%; clip-path: polygon(0 0, 100% 50%, 0 100%); background: linear-gradient(180deg, #e4c9af, #d8b99c); }
+    .right-fold { right: 0; bottom: 0; width: 52%; height: 70%; clip-path: polygon(100% 0, 0 50%, 100% 100%); background: linear-gradient(180deg, #e2c6ac, #d4b392); }
+    .bottom-fold { left: 0; right: 0; bottom: 0; height: 68%; clip-path: polygon(0 100%, 50% 0, 100% 100%); background: linear-gradient(180deg, #eddac6, #e2c8aa); z-index: 2; }
+    .seal { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: 76px; height: 76px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #c95f66, var(--wax)); color: #f9e8e8; display: flex; align-items: center; justify-content: center; font-size: 1.9rem; font-weight: 700; letter-spacing: .04em; box-shadow: 0 8px 16px rgba(114,32,39,.22); z-index: 5; border: 2px solid rgba(255,255,255,.25); }
+    .envelope-front-text { position: absolute; z-index: 6; inset: 12% 11% 22% 11%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; pointer-events: none; }
+    .envelope-front-text .to-line { font-size: clamp(1.4rem, 3vw, 2.15rem); line-height: 1.25; letter-spacing: .03em; text-transform: uppercase; color: var(--accent-dark); max-width: 90%; margin-top: .15rem; }
+    .envelope-front-text .date-line { margin-top: 1rem; font-size: clamp(1rem, 2vw, 1.2rem); letter-spacing: .05em; color: #7e5a4b; }
+    .envelope-front-text .hint { margin-top: auto; font-size: .98rem; color: #7e5a4b; font-style: italic; }
+    .controls { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 7; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    button { font: inherit; border: none; border-radius: 999px; padding: 12px 20px; cursor: pointer; background: linear-gradient(180deg, var(--accent), var(--accent-dark)); color: #fffaf6; box-shadow: 0 8px 16px rgba(86,54,45,.2); transition: transform .15s ease, box-shadow .15s ease, opacity .2s ease; }
+    button:hover, button:focus-visible { transform: translateY(-1px); box-shadow: 0 12px 20px rgba(86,54,45,.26); outline: 2px solid rgba(141,91,76,.25); outline-offset: 2px; }
+    body.open #open-letter { display: none; }
+    body:not(.open) #close-letter { display: none; }
+    .letter { width: min(92vw, 860px); max-height: 84vh; overflow: auto; background: linear-gradient(180deg, rgba(255,255,255,.22), transparent 10%), repeating-linear-gradient(180deg, transparent 0, transparent 33px, rgba(141,91,76,.08) 34px, transparent 35px), var(--paper); border: 1px solid rgba(111,71,59,.18); border-radius: 10px; box-shadow: 0 18px 30px var(--shadow); padding: clamp(26px, 4vw, 52px); position: relative; }
+    .letter::before, .letter::after { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(141,91,76,.12); border-radius: 6px; pointer-events: none; }
+    .letter::after { inset: 16px; border-color: rgba(141,91,76,.08); }
+    .letter-header { margin-bottom: 2rem; position: relative; z-index: 1; }
+    .place-date { margin: 0 0 1.1rem 0; font-size: 1.08rem; letter-spacing: .03em; color: #6d4c3f; }
+    .title { margin: 0; font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-dark); line-height: 1.25; }
+    .letter-body { position: relative; z-index: 1; font-size: clamp(1.08rem, 2vw, 1.28rem); line-height: 1.92; }
+    .letter-body p { margin: 0 0 1.1rem 0; white-space: pre-wrap; }
+    .signature { margin-top: 1.8rem; text-align: right; font-size: clamp(1.15rem, 2.2vw, 1.45rem); letter-spacing: .04em; }
+    .screen-reader-note { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (prefers-reduced-motion: reduce) { .envelope-wrap, .letter-wrap, .flap, button { transition: none !important; } }
+    @media (max-width: 720px) {
+      body { padding: 14px; }
+      .controls { bottom: 10px; }
+      .letter { max-height: 88vh; padding: 22px 18px 26px; }
+      .envelope-front-text { inset: 11% 9% 21% 9%; }
+      .envelope-front-text .hint { font-size: .9rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="scene">
+      <div class="envelope-wrap">
+        <section class="envelope" aria-labelledby="envelope-title envelope-date" aria-describedby="envelope-hint">
+          <div class="envelope-back"></div>
+          <div class="envelope-paper-line"></div>
+          <div class="flap" aria-hidden="true"></div>
+          <div class="left-fold" aria-hidden="true"></div>
+          <div class="right-fold" aria-hidden="true"></div>
+          <div class="bottom-fold" aria-hidden="true"></div>
+          <div class="seal" aria-hidden="true">LK</div>
+          <div class="envelope-front-text">
+            <div class="to-line" id="envelope-title">Gửi ngoan xinh iu thương nhớ</div>
+            <div class="date-line" id="envelope-date">Hải Phòng, 26/09/2026</div>
+            <div class="hint" id="envelope-hint">Một lá thư đang chờ được mở ra.</div>
+          </div>
+          <div class="controls">
+            <button id="open-letter" type="button" aria-expanded="false" aria-controls="letter-panel">Mở thư</button>
+            <button id="close-letter" type="button" aria-controls="letter-panel">Đóng thư</button>
+          </div>
+        </section>
+      </div>
+      <div class="letter-wrap" id="letter-panel" aria-hidden="true">
+        <article class="letter" aria-labelledby="letter-title">
+          <div class="letter-header">
+            <p class="place-date">Hải Phòng, ngày 26/09/2026</p>
+            <h1 class="title" id="letter-title" tabindex="-1">GỬI NGOAN XINH IU THƯƠNG NHỚ!</h1>
+          </div>
+          <div class="letter-body">
+            <p>Khi anh choàng tỉnh, rồi từ từ nhớ lại những chuyện xảy ra đêm vừa rồi, và giờ đây khi đang viết những dòng thư đầu tiên cho người con gái mà anh yêu thương nhất cuộc đời này, trời cũng đã lên cao rồi.</p>
+            <p>Không biết giờ này em đã ngủ chưa, hay cả đêm vừa rồi em đã thức trắng nhỉ?</p>
+            <p>Nhưng có một điều anh biết rất rõ: Dù ngủ được hay không thì quãng thời gian anh ngủ thiếp đi khi vẫn đang cố gắng dỗ dành em, đối với em không hề dễ dàng một chút nào cả.</p>
+            <p>Anh biết em yêu đã rất buồn, rất tủi thân, ấm ức và có lẽ là cả thất vọng nữa.</p>
+            <p>Không buồn tủi, không thất  vọng sao được khi người đàn ông mà em hằng tin yêu này lại một lần nữa để em lại một mình trong đêm như thế chứ?</p>
+            <p>Anh biết hết, tình yêu à!</p>
+            <p>Anh xin lỗi!</p>
+            <p>Anh cũng biết là mấy hôm nay em đã chạnh lòng, đã tủi thân nhiều lắm, nhưng vẫn cố hiểu cho anh, nghĩ cho anh, không muốn anh mệt.</p>
+            <p>Và đêm vừa rồi em nói ra như thế cũng chỉ muốn được người yêu mình ôm vào lòng, dỗ dành thôi.</p>
+            <p>Nhưng anh đã quên mất điều đó.</p>
+            <p>Anh cố nói, cố tranh cãi, cố tìm cách giải quyết vấn đề đó mà không nhận ra rằng như thế lại càng khiến người yêu của anh mệt hơn, tủi hơn.</p>
+            <p>Xin lỗi em bé yêu của anh!</p>
+            <p>Xin lỗi em rất nhiều!</p>
+            <p>Anh biết dù có nói thế nào, có xin lỗi thêm bao nhiêu lần đi chăng nữa thì cũng không thể nào xóa đi được nỗi buồn tủi và những tổn thương trong lòng em.</p>
+            <p>Anh cũng không muốn xóa hết những thứ đó.</p>
+            <p>Em vẫn sẽ nhớ rằng người đàn ông em yêu thương, tin tưởng đã từng có nhiều lúc làm em tủi thân, chạnh lòng và tổn thương.</p>
+            <p>Nhưng người đàn ông ấy vẫn sẽ luôn ở lại cùng em, luôn cố gắng yêu thương em nhiều hơn nữa, dành cho em tất cả những gì dịu dàng, mãnh liệt và chân thành nhất mà người ấy có.</p>
+            <p>Người ấy vẫn luôn cố gắng từng chút một để tinh tế hơn, mặc dù sự cố gắng ấy nhiều lúc thất bại, nhưng người ấy vẫn không từ bỏ, vẫn nguyện ở lại, vẫn yêu, và vẫn sẵn sàng vì tình yêu này, vì người con gái mình thương yêu nhất cuộc đời này mà cố gắng lắng nghe, thấu hiểu người con gái ấy nhiều hơn.</p>
+            <p>Anh không cố gắng trở thành người đàn ông hoàn hảo của em đâu, anh chỉ muốn cố gắng làm sao để mình trở thành một người đàn ông đủ vững vàng, lắng nghe đủ nhiều, thấu hiểu đủ nhiều, và đủ tinh tế để em có thể trải lòng, có thể dựa vào dù cóấm ức, có buồn thế nào.</p>
+            <p>Anh không hoàn hảo đâu người yêu, anh cũng có những phần sứt mẻ, xấu xí đấy thôi.</p>
+            <p>Nhưng nếu hỏi anh rằng điều gì là thứ mềm nhất trong lòng anh, thì câu trả lời của anh chính là em, là người con gái bên ngoài cá tính, đáng yêu, nhiều năng lượng và luôn quan tâm đến những người quanh mình, nhưng bên trong lại mong manh, nhạy cảm, rất dễ tổn thương và có nhiều lúc cố hiểu chuyện, cố nghĩ cho người khác, cố tỏ ra mình ổn đến... đáng ghét.</p>
+            <p>Nhưng nếu không có cái sự “đáng ghét” đó thì có lẽ anh cũng không đến mức vừa yêu thương, vừa đau lòng và vừa khát khao che chở cho em nhiều như thế, mãnh liệt như thế.</p>
+            <p>Tình yêu ơi!</p>
+            <p>Anh biết em buồn, em tủi thân nhiều lắm!</p>
+            <p>Cứ buồn đi em, vì nỗi buồn đâu phải là thứ muốn hết là hết ngay được đâu.</p>
+            <p>Nhưng hãy nhớ giữ gìn sức khỏe tình yêu nhé.</p>
+            <p>Nếu ăn được thì tốt, còn cảm thấy buồn đến nỗi không muốn ăn nhiều thì cũng đừng cố, ăn ít thôi cũng được.</p>
+            <p>Và nhớ rằng anh vẫn sẽ luôn ở lại với em, sẽ vì em, vì tình yêu này mà cố gắng tốt hơn từng ngày, sẽ dành cho em tất cả những yêu thương, sự dịu dàng, chân thành mà anh có.</p>
+            <p>Yêu em bé ngoan xinh yêu của anh thật nhiều!</p>
+            <p class="signature">L💕K</p>
+          </div>
+        </article>
+      </div>
+    </div>
+    <p class="screen-reader-note" aria-live="polite" id="live-status"></p>
+  </main>
+  <script>
+    (() => {
+      const body = document.body;
+      const openButton = document.getElementById('open-letter');
+      const closeButton = document.getElementById('close-letter');
+      const letterWrap = document.getElementById('letter-panel');
+      const letterTitle = document.getElementById('letter-title');
+      const liveStatus = document.getElementById('live-status');
+      function openLetter() {
+        body.classList.add('open');
+        openButton.setAttribute('aria-expanded', 'true');
+        letterWrap.setAttribute('aria-hidden', 'false');
+        liveStatus.textContent = 'Lá thư đã được mở.';
+        setTimeout(() => letterTitle.focus(), 250);
+      }
+      function closeLetter() {
+        body.classList.remove('open');
+        openButton.setAttribute('aria-expanded', 'false');
+        letterWrap.setAttribute('aria-hidden', 'true');
+        liveStatus.textContent = 'Lá thư đã được đóng.';
+        setTimeout(() => openButton.focus(), 150);
+      }
+      openButton.addEventListener('click', openLetter);
+      closeButton.addEventListener('click', closeLetter);
+    })();
+  </script>
+</body>
+</html>
