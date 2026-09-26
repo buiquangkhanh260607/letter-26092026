@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" translate="no" class="notranslate">
 <head>
   <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gửi ngoan xinh iu thương nhớ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-1: #efe1cf;
@@ -18,7 +22,7 @@
     }
     * { box-sizing: border-box; }
     html, body {
-      margin: 0; min-height: 100%; font-family: Georgia, "Times New Roman", serif;
+      margin: 0; min-height: 100%; font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       color: var(--ink);
       background: radial-gradient(circle at top, rgba(255,255,255,0.35), transparent 35%), linear-gradient(180deg, var(--bg-1), var(--bg-2));
     }
@@ -55,9 +59,46 @@
     .letter-header { margin-bottom: 2rem; position: relative; z-index: 1; }
     .place-date { margin: 0 0 1.1rem 0; font-size: 1.08rem; letter-spacing: .03em; color: #6d4c3f; }
     .title { margin: 0; font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-dark); line-height: 1.25; }
-    .letter-body { position: relative; z-index: 1; font-size: clamp(1.08rem, 2vw, 1.28rem); line-height: 1.92; }
-    .letter-body p { margin: 0 0 1.1rem 0; white-space: pre-wrap; }
-    .signature { margin-top: 1.8rem; text-align: right; font-size: clamp(1.15rem, 2.2vw, 1.45rem); letter-spacing: .04em; }
+
+    .title, .place-date, .envelope-front-text .to-line, .envelope-front-text .date-line {
+      font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+    .letter-body {
+      position: relative;
+      z-index: 1;
+      font-family: "Patrick Hand", "Segoe Print", "Segoe UI", Arial, sans-serif;
+      font-size: clamp(1.22rem, 2.15vw, 1.5rem);
+      line-height: 1.85;
+      letter-spacing: normal;
+      word-spacing: normal;
+      font-kerning: normal;
+      font-variant-ligatures: normal;
+      font-feature-settings: normal;
+      font-synthesis: none;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: none;
+    }
+    .letter-body p {
+      margin: 0 0 1.1rem 0;
+      white-space: normal;
+      letter-spacing: normal;
+      word-spacing: normal;
+    }
+    .signature {
+      margin-top: 1.8rem;
+      text-align: right;
+      font-family: "Patrick Hand", "Segoe Print", "Segoe UI", Arial, sans-serif;
+      font-size: clamp(1.3rem, 2.35vw, 1.6rem);
+      letter-spacing: normal;
+      word-spacing: normal;
+      font-kerning: normal;
+      text-rendering: auto;
+    }
     .screen-reader-note { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     @media (prefers-reduced-motion: reduce) { .envelope-wrap, .letter-wrap, .flap, button { transition: none !important; } }
     @media (max-width: 720px) {
@@ -93,7 +134,7 @@
         </section>
       </div>
       <div class="letter-wrap" id="letter-panel" aria-hidden="true">
-        <article class="letter" aria-labelledby="letter-title">
+        <article class="letter notranslate" translate="no" aria-labelledby="letter-title">
           <div class="letter-header">
             <p class="place-date">Hải Phòng, ngày 26/09/2026</p>
             <h1 class="title" id="letter-title" tabindex="-1">GỬI NGOAN XINH IU THƯƠNG NHỚ!</h1>
@@ -103,7 +144,7 @@
             <p>Không biết giờ này em đã ngủ chưa, hay cả đêm vừa rồi em đã thức trắng nhỉ?</p>
             <p>Nhưng có một điều anh biết rất rõ: Dù ngủ được hay không thì quãng thời gian anh ngủ thiếp đi khi vẫn đang cố gắng dỗ dành em, đối với em không hề dễ dàng một chút nào cả.</p>
             <p>Anh biết em yêu đã rất buồn, rất tủi thân, ấm ức và có lẽ là cả thất vọng nữa.</p>
-            <p>Không buồn tủi, không thất  vọng sao được khi người đàn ông mà em hằng tin yêu này lại một lần nữa để em lại một mình trong đêm như thế chứ?</p>
+            <p>Không buồn tủi, không thất vọng sao được khi người đàn ông mà em hằng tin yêu này lại một lần nữa để em lại một mình trong đêm như thế chứ?</p>
             <p>Anh biết hết, tình yêu à!</p>
             <p>Anh xin lỗi!</p>
             <p>Anh cũng biết là mấy hôm nay em đã chạnh lòng, đã tủi thân nhiều lắm, nhưng vẫn cố hiểu cho anh, nghĩ cho anh, không muốn anh mệt.</p>
@@ -117,7 +158,7 @@
             <p>Em vẫn sẽ nhớ rằng người đàn ông em yêu thương, tin tưởng đã từng có nhiều lúc làm em tủi thân, chạnh lòng và tổn thương.</p>
             <p>Nhưng người đàn ông ấy vẫn sẽ luôn ở lại cùng em, luôn cố gắng yêu thương em nhiều hơn nữa, dành cho em tất cả những gì dịu dàng, mãnh liệt và chân thành nhất mà người ấy có.</p>
             <p>Người ấy vẫn luôn cố gắng từng chút một để tinh tế hơn, mặc dù sự cố gắng ấy nhiều lúc thất bại, nhưng người ấy vẫn không từ bỏ, vẫn nguyện ở lại, vẫn yêu, và vẫn sẵn sàng vì tình yêu này, vì người con gái mình thương yêu nhất cuộc đời này mà cố gắng lắng nghe, thấu hiểu người con gái ấy nhiều hơn.</p>
-            <p>Anh không cố gắng trở thành người đàn ông hoàn hảo của em đâu, anh chỉ muốn cố gắng làm sao để mình trở thành một người đàn ông đủ vững vàng, lắng nghe đủ nhiều, thấu hiểu đủ nhiều, và đủ tinh tế để em có thể trải lòng, có thể dựa vào dù cóấm ức, có buồn thế nào.</p>
+            <p>Anh không cố gắng trở thành người đàn ông hoàn hảo của em đâu, anh chỉ muốn cố gắng làm sao để mình trở thành một người đàn ông đủ vững vàng, lắng nghe đủ nhiều, thấu hiểu đủ nhiều, và đủ tinh tế để em có thể trải lòng, có thể dựa vào dù có ấm ức, có buồn thế nào.</p>
             <p>Anh không hoàn hảo đâu người yêu, anh cũng có những phần sứt mẻ, xấu xí đấy thôi.</p>
             <p>Nhưng nếu hỏi anh rằng điều gì là thứ mềm nhất trong lòng anh, thì câu trả lời của anh chính là em, là người con gái bên ngoài cá tính, đáng yêu, nhiều năng lượng và luôn quan tâm đến những người quanh mình, nhưng bên trong lại mong manh, nhạy cảm, rất dễ tổn thương và có nhiều lúc cố hiểu chuyện, cố nghĩ cho người khác, cố tỏ ra mình ổn đến... đáng ghét.</p>
             <p>Nhưng nếu không có cái sự “đáng ghét” đó thì có lẽ anh cũng không đến mức vừa yêu thương, vừa đau lòng và vừa khát khao che chở cho em nhiều như thế, mãnh liệt như thế.</p>
